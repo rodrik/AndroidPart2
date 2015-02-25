@@ -20,8 +20,6 @@ public class DownloaderTaskFragment extends Fragment {
 	@SuppressWarnings ("unused")
 	private static final String TAG = "Lab-Threads";
 
-	static final String TAG_FRIEND_RES_IDS = "friends";
-
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -34,7 +32,7 @@ public class DownloaderTaskFragment extends Fragment {
 
 		// Retrieve arguments from DownloaderTaskFragment
 		// Prepare them for use with DownloaderTask. 
-		ArrayList<Integer> friends = getArguments().getIntegerArrayList(TAG_FRIEND_RES_IDS);
+		ArrayList<Integer> friends = getArguments().getIntegerArrayList(MainActivity.TAG_FRIEND_RES_IDS);
 
 		// Start the DownloaderTask 
 		downloaderTask.execute(friends.toArray(new Integer[] {}));
