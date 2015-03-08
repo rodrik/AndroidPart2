@@ -20,7 +20,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
-import android.util.Log;
 import android.widget.Toast;
 
 public class MainActivity extends Activity implements SelectionListener,
@@ -42,7 +41,7 @@ public class MainActivity extends Activity implements SelectionListener,
 			"msrebeccablack", "ladygaga" };
 	public static final int IS_ALIVE = Activity.RESULT_FIRST_USER;
 	public static final String DATA_REFRESHED_ACTION = "course.labs.notificationslabnew.DATA_REFRESHED";
-	private static final String TAG = "Lab-Notifications";
+	//private static final String TAG = "Lab-Notifications";
 
 	// Raw feed file IDs used to reference stored tweet data
 	public static final ArrayList<Integer> sRawTextFeedIds = new ArrayList<Integer>(
@@ -83,8 +82,10 @@ public class MainActivity extends Activity implements SelectionListener,
 		if (!mIsFresh) {
 			installDownloaderTaskFragment();
 
-			// TODO: Show a Toast message displaying
+			// Show a Toast message displaying
 			// R.string.download_in_progress string
+			Toast toast = Toast.makeText(getBaseContext(), R.string.download_in_progress_string, Toast.LENGTH_SHORT);
+			toast.show();
 
 
 			
@@ -95,11 +96,12 @@ public class MainActivity extends Activity implements SelectionListener,
 				@Override
 				public void onReceive(Context context, Intent intent) {
 
-					// TODO:
 					// Check to make sure this is an ordered broadcast
 					// Let sender know that the Intent was received
 					// by setting result code to MainActivity.IS_ALIVE
-
+					if(isOrderedBroadcast()) {
+						setResultCode(IS_ALIVE);
+					}
 
 					
 					
@@ -150,10 +152,9 @@ public class MainActivity extends Activity implements SelectionListener,
 	protected void onResume() {
 		super.onResume();
 
-		// TODO:
 		// Register the BroadcastReceiver to receive a
 		// DATA_REFRESHED_ACTION broadcast
-
+		registerReceiver(mRefreshReceiver, new IntentFilter(DATA_REFRESHED_ACTION));
 		
 		
 		
@@ -162,13 +163,12 @@ public class MainActivity extends Activity implements SelectionListener,
 	@Override
 	protected void onPause() {
 
-		// TODO:
 		// Unregister the BroadcastReceiver if it has been registered
 		// Note: check that mRefreshReceiver is not null before attempting to
 		// unregister in order to work around an Instrumentation issue
-
-
-		
+		if(mRefreshReceiver!=null) {
+			unregisterReceiver(mRefreshReceiver);
+		}
 		
 		
 		super.onPause();
