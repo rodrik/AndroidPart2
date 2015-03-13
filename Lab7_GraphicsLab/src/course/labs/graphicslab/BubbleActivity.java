@@ -80,24 +80,26 @@ public class BubbleActivity extends Activity {
 
 		mAudioManager = (AudioManager) getSystemService(AUDIO_SERVICE);
 
-		mStreamVolume = (float) mAudioManager
-				.getStreamVolume(AudioManager.STREAM_MUSIC)
-				/ mAudioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC);
+		mStreamVolume = (float) mAudioManager.getStreamVolume(AudioManager.STREAM_MUSIC) / mAudioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC);
 
-		// TODO - make a new SoundPool, allowing up to 10 streams
-		mSoundPool = null;
+		// make a new SoundPool, allowing up to 10 streams
+		mSoundPool = new SoundPool(10, AudioManager.STREAM_MUSIC, 0);
 
-		// TODO - set a SoundPool OnLoadCompletedListener that calls
-		// setupGestureDetector()
-		
-		
-		
-		
-		
-		// TODO - load the sound from res/raw/bubble_pop.wav
-		
-		
-		
+		// set a SoundPool OnLoadCompletedListener that calls setupGestureDetector()
+		mSoundPool.setOnLoadCompleteListener(new OnLoadCompleteListener() {
+			@Override
+			public void onLoadComplete(SoundPool soundPool, int sampleId, int status) {
+				if (0 == status) {
+					setupGestureDetector();
+				} else {
+					Log.i(TAG, "Unable to load sound");
+					finish();
+				}
+			}
+		});
+
+		// load the sound from res/raw/bubble_pop.wav
+		mSoundID = mSoundPool.load(this, R.raw.bubble_pop, 1);
 
 	}
 
@@ -123,8 +125,7 @@ public class BubbleActivity extends Activity {
 			// BubbleView's velocity
 
 			@Override
-			public boolean onFling(MotionEvent event1, MotionEvent event2,
-					float velocityX, float velocityY) {
+			public boolean onFling(MotionEvent event1, MotionEvent event2, float velocityX, float velocityY) {
 
 				// TODO - Implement onFling actions.
 				// You can get all Views in mFrame one at a time
@@ -171,29 +172,23 @@ public class BubbleActivity extends Activity {
 
 	@Override
 	public boolean onTouchEvent(MotionEvent event) {
-
-		// TODO - Delegate the touch to the gestureDetector
-
-		
-
-		
-		
-		
-		
-		return true || false;
+		// Delegate the touch to the gestureDetector
+		return mGestureDetector.onTouchEvent(event);
 		
 	}
 
 	@Override
 	protected void onPause() {
 
-		// TODO - Release all SoundPool resources
+		// Release all SoundPool resources
+		if (null != mSoundPool) {
+			mSoundPool.unload(mSoundID);
+			mSoundPool.release();
+			mSoundPool = null;
+		}
+		mAudioManager.setSpeakerphoneOn(false);
+		mAudioManager.unloadSoundEffects();
 
-
-
-		
-		
-		
 		super.onPause();
 	}
 
