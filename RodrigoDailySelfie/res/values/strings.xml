@@ -3,6 +3,9 @@
 
     <string name="app_name">Rodrigo\'s Daily Selfie</string>
     <string name="action_settings">Settings</string>
+    <string name="action_camera">Camera</string>
     <string name="hello_world">Hello world!</string>
+    
+    <string name="error_saving_picture">Error saving picture! Please try again.</string>
 
 </resources>
