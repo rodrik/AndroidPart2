@@ -7,5 +7,6 @@
     <string name="hello_world">Hello world!</string>
     
     <string name="error_saving_picture">Error saving picture! Please try again.</string>
+    <string name="error_accessing_storage">Error accessing storage! External Storage is mandatory.</string>
 
 </resources>

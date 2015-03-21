@@ -32,28 +32,25 @@ public class MainActivity extends ListActivity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		//setContentView(R.layout.activity_main);
 
-		// Create a new Adapter containing a list of colors
 		// Set the adapter on this ListActivity's built-in ListView
 		SelfieAdapter adapter = new SelfieAdapter(this);
 		setListAdapter(adapter);
-		
+
 		ListView lv = getListView();
-		
-		// Enable filtering when the user types in the virtual keyboard
-		//lv.setTextFilterEnabled(true);
-		
+
 		// Set an setOnItemClickListener on the ListView
 		lv.setOnItemClickListener(new OnItemClickListener() {
 			public void onItemClick(AdapterView<?> parent, View view,
 					int position, long id) {
+				
+				// Start Android's View Image Intent
 				Selfie selfie = (Selfie)parent.getAdapter().getItem(position);
-			    Intent intent = new Intent();
-			    intent.setAction(android.content.Intent.ACTION_VIEW); 
-			    intent.setDataAndType(Uri.fromFile(selfie.getFile()),"image/*");
+				Intent intent = new Intent();
+				intent.setAction(android.content.Intent.ACTION_VIEW); 
+				intent.setDataAndType(Uri.fromFile(selfie.getFile()),"image/*");
 
-			    startActivity(intent);
+				startActivity(intent);
 			}
 		});
 	}
@@ -65,8 +62,10 @@ public class MainActivity extends ListActivity {
 				// Image captured and saved to fileUri specified in the Intent
 				Log.d(TAG, "Picture ok");
 				Toast.makeText(this, "Image saved to:\n" + fileUri.getPath(), Toast.LENGTH_LONG).show();
+				
+				// Update ListView
 				((BaseAdapter)getListAdapter()).notifyDataSetChanged();
-
+				
 			} else if (resultCode == RESULT_CANCELED) {
 				// User cancelled the image capture, do nothing
 				Log.d(TAG, "Picture cancelled");
@@ -88,22 +87,15 @@ public class MainActivity extends ListActivity {
 	}
 
 	/** 
-	 * Create a file Uri for saving an image 
-	 * 
-	 * {@link http://developer.android.com/guide/topics/media/camera.html}
-	 * */
-	private static Uri getOutputMediaFileUri(){
-		return Uri.fromFile(getOutputMediaFile());
-	}
-
-	/** 
 	 * Create a File for saving an image
 	 * 
 	 * {@link http://developer.android.com/guide/topics/media/camera.html}
 	 * */
-	private static File getOutputMediaFile(){
+	private static File getOutputMediaFile() {
 		// To be safe, you should check that the SDCard is mounted
-		// using Environment.getExternalStorageState() before doing this.
+		if(!Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
+			return null;
+		}
 
 		File mediaStorageDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
 		// This location works best if you want the created images to be shared
@@ -131,14 +123,19 @@ public class MainActivity extends ListActivity {
 		switch (item.getItemId()) {
 		case R.id.action_camera:
 			Log.d(TAG, "Action camera selected");
+			
+			// Start Android's Camera Intent
 			Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-			fileUri = getOutputMediaFileUri(); // create a file to save the image
+			File newFile = getOutputMediaFile();
+			if(newFile==null) {
+				Log.d(TAG, "SDCard error");
+				Toast.makeText(this, R.string.error_accessing_storage, Toast.LENGTH_LONG).show();
+				return false;
+			}
+			
+			fileUri = Uri.fromFile(newFile); // create a file to save the image
 			intent.putExtra(MediaStore.EXTRA_OUTPUT, fileUri); // set the image file name
 			startActivityForResult(intent, CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE);
-			return true;
-
-		case R.id.action_settings:
-			Log.d(TAG, "Action settings selected");
 			return true;
 
 		default:

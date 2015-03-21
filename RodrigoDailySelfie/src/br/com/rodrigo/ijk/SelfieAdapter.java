@@ -3,7 +3,6 @@ package br.com.rodrigo.ijk;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Date;
 import java.util.List;
 
 import android.app.Activity;
@@ -66,7 +65,7 @@ public class SelfieAdapter extends BaseAdapter {
 			if(file.isDirectory()) {
 				continue;
 			}
-			Selfie s1 = new Selfie(file, new Date(file.lastModified()), file.getName());
+			Selfie s1 = new Selfie(file);
 			selfies.add(s1);
 		}
 		Collections.sort(selfies);

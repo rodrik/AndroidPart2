@@ -9,39 +9,26 @@ public class Selfie implements Comparable<Selfie> {
 		super();
 	}
 	
-	public Selfie(File file, Date timestamp, String filename) {
+	public Selfie(File file) {
 		super();
 		this.file = file;
-		this.timestamp = timestamp;
-		this.filename = filename;
 	}
 	
 	private File file;
-	private Date timestamp;
-	private String filename;
 	
 	public File getFile() {
 		return file;
 	}
-	public void setFile(File file) {
-		this.file = file;
-	}
 	public Date getTimestamp() {
-		return timestamp;
-	}
-	public void setTimestamp(Date timestamp) {
-		this.timestamp = timestamp;
+		return new Date(this.file.lastModified());
 	}
 	public String getFilename() {
-		return filename;
-	}
-	public void setFilename(String filename) {
-		this.filename = filename;
+		return this.file.getName();
 	}
 
 	@Override
 	public int compareTo(Selfie another) {
-		return timestamp.compareTo(another.getTimestamp()) * -1;
+		return getTimestamp().compareTo(another.getTimestamp()) * -1;
 	}
 	
 }
