@@ -53,6 +53,7 @@ public class MainActivity extends ListActivity {
 				intent.setAction(android.content.Intent.ACTION_VIEW); 
 				intent.setDataAndType(Uri.fromFile(selfie.getFile()),"image/*");
 
+				startActivity(intent);
 			}
 		});
 		
