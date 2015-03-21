@@ -3,7 +3,7 @@ package br.com.rodrigo.ijk;
 import java.io.File;
 import java.util.Date;
 
-public class Selfie {
+public class Selfie implements Comparable<Selfie> {
 	
 	public Selfie() {
 		super();
@@ -37,6 +37,11 @@ public class Selfie {
 	}
 	public void setFilename(String filename) {
 		this.filename = filename;
+	}
+
+	@Override
+	public int compareTo(Selfie another) {
+		return timestamp.compareTo(another.getTimestamp()) * -1;
 	}
 	
 }

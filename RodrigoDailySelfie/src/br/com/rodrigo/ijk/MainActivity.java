@@ -2,9 +2,7 @@ package br.com.rodrigo.ijk;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 import android.app.ListActivity;
 import android.content.Intent;
@@ -18,8 +16,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.BaseAdapter;
 import android.widget.ListView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 public class MainActivity extends ListActivity {
@@ -38,7 +36,7 @@ public class MainActivity extends ListActivity {
 
 		// Create a new Adapter containing a list of colors
 		// Set the adapter on this ListActivity's built-in ListView
-		SelfieAdapter adapter = new SelfieAdapter(this, getSelfieList());
+		SelfieAdapter adapter = new SelfieAdapter(this);
 		setListAdapter(adapter);
 		
 		ListView lv = getListView();
@@ -50,23 +48,14 @@ public class MainActivity extends ListActivity {
 		lv.setOnItemClickListener(new OnItemClickListener() {
 			public void onItemClick(AdapterView<?> parent, View view,
 					int position, long id) {
-				// Display a Toast message indicting the selected item
-				Toast.makeText(getApplicationContext(), ((TextView) view).getText(), Toast.LENGTH_SHORT).show();
+				Selfie selfie = (Selfie)parent.getAdapter().getItem(position);
+			    Intent intent = new Intent();
+			    intent.setAction(android.content.Intent.ACTION_VIEW); 
+			    intent.setDataAndType(Uri.fromFile(selfie.getFile()),"image/*");
+
+			    startActivity(intent);
 			}
 		});
-	}
-
-	private List<Selfie> getSelfieList() {
-		List<Selfie> selfies = new ArrayList<Selfie>();
-		File mediaStorageDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
-		for (File file : mediaStorageDir.listFiles()) {
-			if(file.isDirectory()) {
-				continue;
-			}
-			Selfie s1 = new Selfie(file, new Date(file.lastModified()), file.getName());
-			selfies.add(s1);
-		}
-		return selfies;
 	}
 
 	@Override
@@ -76,6 +65,7 @@ public class MainActivity extends ListActivity {
 				// Image captured and saved to fileUri specified in the Intent
 				Log.d(TAG, "Picture ok");
 				Toast.makeText(this, "Image saved to:\n" + fileUri.getPath(), Toast.LENGTH_LONG).show();
+				((BaseAdapter)getListAdapter()).notifyDataSetChanged();
 
 			} else if (resultCode == RESULT_CANCELED) {
 				// User cancelled the image capture, do nothing
@@ -89,7 +79,6 @@ public class MainActivity extends ListActivity {
 			}
 		}
 	}
-
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
