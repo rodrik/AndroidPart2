@@ -2,9 +2,12 @@ package br.com.rodrigo.ijk;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 
+import android.app.AlarmManager;
 import android.app.ListActivity;
+import android.app.PendingIntent;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -50,9 +53,24 @@ public class MainActivity extends ListActivity {
 				intent.setAction(android.content.Intent.ACTION_VIEW); 
 				intent.setDataAndType(Uri.fromFile(selfie.getFile()),"image/*");
 
-				startActivity(intent);
 			}
 		});
+		
+		scheduleNotificationService();
+	}
+
+	private void scheduleNotificationService() {
+		Intent intentService = new Intent(getApplicationContext(), NotificationService.class);
+		PendingIntent pendingIntent = PendingIntent.getService(getApplicationContext(), 2222, intentService,
+		PendingIntent.FLAG_CANCEL_CURRENT);
+		
+		// Registering our pending intent with AlarmManager
+		// Current time +2min
+		Calendar cal = Calendar.getInstance();
+		cal.add(Calendar.MINUTE, 2);
+		
+		AlarmManager am = (AlarmManager) getSystemService(ALARM_SERVICE);
+		am.set(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis(), pendingIntent);
 	}
 
 	@Override
