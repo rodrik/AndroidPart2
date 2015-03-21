@@ -2,9 +2,11 @@ package br.com.rodrigo.ijk;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
-import android.app.Activity;
+import android.app.ListActivity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -13,9 +15,15 @@ import android.provider.MediaStore;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
-public class MainActivity extends Activity {
+public class MainActivity extends ListActivity {
 
 	private static final String TAG = "RodrigoDailySelfie";
 
@@ -27,8 +35,37 @@ public class MainActivity extends Activity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_main);
+		//setContentView(R.layout.activity_main);
 
+		// Create a new Adapter containing a list of colors
+		// Set the adapter on this ListActivity's built-in ListView
+		SelfieAdapter adapter = new SelfieAdapter(this, getSelfieList());
+		setListAdapter(adapter);
+		
+		ListView lv = getListView();
+		
+		// Enable filtering when the user types in the virtual keyboard
+		//lv.setTextFilterEnabled(true);
+		
+		// Set an setOnItemClickListener on the ListView
+		lv.setOnItemClickListener(new OnItemClickListener() {
+			public void onItemClick(AdapterView<?> parent, View view,
+					int position, long id) {
+				// Display a Toast message indicting the selected item
+				Toast.makeText(getApplicationContext(), ((TextView) view).getText(), Toast.LENGTH_SHORT).show();
+			}
+		});
+	}
+
+	private List<Selfie> getSelfieList() {
+		List<Selfie> selfies = new ArrayList<Selfie>();
+		Selfie s1 = new Selfie(1L, new Date(), "file1.jpg");
+		Selfie s2 = new Selfie(2L, new Date(), "file2.jpg");
+		Selfie s3 = new Selfie(3L, new Date(), "file3.jpg");
+		selfies.add(s1);
+		selfies.add(s2);
+		selfies.add(s3);
+		return selfies;
 	}
 
 	@Override
