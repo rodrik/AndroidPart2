@@ -18,7 +18,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -59,12 +58,14 @@ public class MainActivity extends ListActivity {
 
 	private List<Selfie> getSelfieList() {
 		List<Selfie> selfies = new ArrayList<Selfie>();
-		Selfie s1 = new Selfie(1L, new Date(), "file1.jpg");
-		Selfie s2 = new Selfie(2L, new Date(), "file2.jpg");
-		Selfie s3 = new Selfie(3L, new Date(), "file3.jpg");
-		selfies.add(s1);
-		selfies.add(s2);
-		selfies.add(s3);
+		File mediaStorageDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
+		for (File file : mediaStorageDir.listFiles()) {
+			if(file.isDirectory()) {
+				continue;
+			}
+			Selfie s1 = new Selfie(file, new Date(file.lastModified()), file.getName());
+			selfies.add(s1);
+		}
 		return selfies;
 	}
 

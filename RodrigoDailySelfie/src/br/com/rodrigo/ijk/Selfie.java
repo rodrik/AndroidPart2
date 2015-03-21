@@ -1,5 +1,6 @@
 package br.com.rodrigo.ijk;
 
+import java.io.File;
 import java.util.Date;
 
 public class Selfie {
@@ -8,21 +9,22 @@ public class Selfie {
 		super();
 	}
 	
-	public Selfie(Long id, Date timestamp, String filename) {
+	public Selfie(File file, Date timestamp, String filename) {
 		super();
-		this.id = id;
+		this.file = file;
 		this.timestamp = timestamp;
 		this.filename = filename;
 	}
-	private Long id;
+	
+	private File file;
 	private Date timestamp;
 	private String filename;
 	
-	public Long getId() {
-		return id;
+	public File getFile() {
+		return file;
 	}
-	public void setId(Long id) {
-		this.id = id;
+	public void setFile(File file) {
+		this.file = file;
 	}
 	public Date getTimestamp() {
 		return timestamp;

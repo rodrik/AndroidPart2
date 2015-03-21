@@ -4,7 +4,8 @@
 
     <ImageView
         android:id="@+id/imageView1"
-        android:layout_width="wrap_content"
+        android:layout_width="100dp"
+        android:layout_marginLeft="20dp"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
@@ -14,18 +15,9 @@
         android:id="@+id/textView1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="23dp"
-        android:layout_marginTop="10dp"
+        android:layout_marginLeft="20dp"
         android:layout_toRightOf="@+id/imageView1"
-        android:text="Title"
-        android:textSize="16sp" />
-
-    <TextView
-        android:id="@+id/textView2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/imageView1"
-        android:layout_alignLeft="@+id/textView1"
-        android:text="Description" />
+        android:layout_centerVertical="true"
+        android:textSize="18sp" />
 
 </RelativeLayout>

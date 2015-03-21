@@ -4,10 +4,12 @@ import java.util.List;
 
 import android.app.Activity;
 import android.content.Context;
+import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 public class SelfieAdapter extends BaseAdapter {
@@ -44,13 +46,12 @@ public class SelfieAdapter extends BaseAdapter {
             arg1 = inflater.inflate(R.layout.list_item, arg2, false);
         }
 
-		TextView selfie = (TextView)arg1.findViewById(R.id.textView1);
-		TextView chapterDesc = (TextView)arg1.findViewById(R.id.textView2);
+		TextView textView = (TextView)arg1.findViewById(R.id.textView1);
+		ImageView imageView = (ImageView)arg1.findViewById(R.id.imageView1);
 
-		Selfie chapter = selfieList.get(arg0);
-
-		selfie.setText(chapter.getTimestamp().toString());
-		chapterDesc.setText(chapter.getFilename());
+		Selfie selfie = selfieList.get(arg0);
+		imageView.setImageURI(Uri.fromFile(selfie.getFile()));
+		textView.setText(selfie.getFilename());
 
 		return arg1;
 	}
