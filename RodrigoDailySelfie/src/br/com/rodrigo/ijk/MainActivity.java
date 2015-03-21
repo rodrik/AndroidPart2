@@ -67,7 +67,7 @@ public class MainActivity extends ListActivity {
 		// Registering our pending intent with AlarmManager
 		// Current time +2min
 		Calendar cal = Calendar.getInstance();
-		cal.add(Calendar.SECOND, 10);
+		cal.add(Calendar.MINUTE, 2);
 		
 		AlarmManager am = (AlarmManager) getSystemService(ALARM_SERVICE);
 		am.set(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis(), pendingIntent);
