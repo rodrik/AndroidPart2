@@ -24,6 +24,9 @@ public class NotificationService extends IntentService {
 	@Override
 	protected void onHandleIntent(Intent arg0) {
 		Log.d(TAG, "NotificationService onHandleIntent: " + arg0);
+		
+		Intent mNotificationIntent = new Intent(getApplicationContext(), MainActivity.class);
+		PendingIntent pi = PendingIntent.getActivity(getApplicationContext(), 0, mNotificationIntent, Intent.FLAG_ACTIVITY_NEW_TASK);
 
 		// Define the Notification's expanded message and Intent:
 		Notification.Builder notificationBuilder = new Notification.Builder(
@@ -31,8 +34,8 @@ public class NotificationService extends IntentService {
 		.setTicker("Time for a Selfie")
 		.setSmallIcon(R.drawable.ic_action_camera)
 		.setAutoCancel(true)
-		.setContentTitle("Rodrigo's Selfie")
-		.setContentText("Let's take a selfie!");
+		.setContentIntent(pi)
+		.setContentTitle("Let's take a selfie!");
 		
 		// Pass the Notification to the NotificationManager:
 		NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
@@ -42,6 +45,7 @@ public class NotificationService extends IntentService {
 	@Override
 	public void onCreate() {
 		// Re-scheduling
+		Log.d(TAG, "NotificationService onCreate: Re-scheduling");
 		
 		Intent intentService = new Intent(getApplicationContext(), NotificationService.class);
 		PendingIntent pendingIntent = PendingIntent.getService(getApplicationContext(), 2222, intentService,
@@ -54,6 +58,8 @@ public class NotificationService extends IntentService {
 		
 		AlarmManager am = (AlarmManager) getSystemService(ALARM_SERVICE);
 		am.set(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis(), pendingIntent);
+		
+		super.onCreate();
 	}
 
 
